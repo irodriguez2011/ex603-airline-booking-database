@@ -1,5 +1,7 @@
 # Airline Booking Database
 
+A PostgreSQL database that models an airline's booking system — passengers, flights, bookings, airports, and the routes connecting them.
+
 ## Project Overview
 
 This repository contains my EX 603 course project: a PostgreSQL relational database for an airline booking system that organizes passengers, flights, bookings, airports, and flight routes.
