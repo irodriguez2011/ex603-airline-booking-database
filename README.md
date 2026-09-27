@@ -32,9 +32,29 @@ The full entity-relationship diagram below shows how the five relations connect.
 
 ![Airline Booking ERD](schema/erd.png)
 
+## Schema
+
+The full DDL is in [`schema/schema.sql`](schema/schema.sql); the reasoning behind each constraint is in [`analysis/unit2.md`](analysis/unit2.md).
+
+| # | Table | Role | Key | References |
+|---|---|---|---|---|
+| 1 | `passengers` | Actor | `passenger_id` (identity) | — |
+| 2 | `airports` | Catalog | `airport_code` (natural IATA code) | — |
+| 3 | `flights` | Producer | `flight_id` (identity) | — |
+| 4 | `flight_routes` | Junction | `(flight_id, stop_sequence)` composite | `flights`, `airports` |
+| 5 | `bookings` | Event | `booking_id` (identity) | `passengers`, `flights`, `bookings` |
+
+Design decisions worth noticing:
+
+- **Recursive foreign key on `bookings.rebooked_from`.** When a passenger changes flights, the new booking points at the one it replaced, forming a change history.
+- **Composite key on the junction.** `flight_routes` is keyed by `(flight_id, stop_sequence)`, not by the two foreign keys, because the order of stops is what the table records.
+- **Deletes preserve history.** Deleting a passenger anonymizes their bookings (`SET NULL`) rather than erasing revenue; flights with bookings and airports with routes cannot be deleted (`RESTRICT`); a cancelled flight is recorded with `flight_status`.
+- **All timestamps are UTC**, which keeps the `arrival_time > departure_time` check valid across time zones and lets `duration_min` be a stored generated column.
+- **Every constraint is named** (`pk_`, `fk_`, `uq_`, `chk_`), so errors point directly at the rule that was broken.
+
 ## Project Status
 
-This project has completed **Unit 1: modeling and planning**. The five relation schemas, the entity-relationship diagram, the integrity constraints, and the Unit 1 written analysis have all been completed and are linked in the repository structure below. The SQL implementation, queries, and further analysis will be added in later units.
+This project has completed **Unit 2: implementation**. Unit 1 produced the relation schemas, ERD, integrity constraints, and written analysis. Unit 2 translated them into a working PostgreSQL schema (`schema/schema.sql`), updated the ERD where implementation changed the design, and documented every foreign key and CHECK decision in `analysis/unit2.md`. Queries and further analysis will be added in later units.
 
 ## Planned Repository Structure
 
@@ -42,6 +62,7 @@ This project has completed **Unit 1: modeling and planning**. The five relation 
 .
 ├── README.md
 ├── schema/
+│   ├── schema.sql
 │   ├── schema-definition.md
 │   ├── constraints.md
 │   ├── erd.png
@@ -52,7 +73,8 @@ This project has completed **Unit 1: modeling and planning**. The five relation 
 │   ├── unit5/
 │   └── unit6/
 ├── analysis/
-│   └── unit1.md
+│   ├── unit1.md
+│   └── unit2.md
 └── screenshots/
 ```
 
@@ -64,7 +86,15 @@ This project has completed **Unit 1: modeling and planning**. The five relation 
 
 ## How to Run the Project
 
-The database setup instructions will be added after the schema is created in a later unit. Before running future SQL files, users will need PostgreSQL 14 or later and access to a PostgreSQL database.
+Requires PostgreSQL 14 or later. Create an empty database, then run the schema script from the repository root:
+
+```bash
+createdb airline_booking
+psql -d airline_booking -v ON_ERROR_STOP=1 -f schema/schema.sql
+psql -d airline_booking -c '\dt'
+```
+
+The script starts with a reset block, so it can be re-run at any time without manual cleanup.
 
 ## Query Catalogue
 

@@ -1,0 +1,47 @@
+erDiagram
+    passengers {
+        int passenger_id PK
+        string first_name
+        string last_name
+        string email UK
+        string phone_number
+        date date_of_birth
+    }
+    airports {
+        string airport_code PK
+        string airport_name
+        string city
+        string country
+    }
+    flights {
+        int flight_id PK
+        string flight_number
+        datetime departure_time
+        datetime arrival_time
+        string aircraft_type
+        decimal base_fare
+        string flight_status
+        int duration_min "generated"
+    }
+    flight_routes {
+        int flight_id PK,FK
+        int stop_sequence PK
+        string airport_code FK
+        string stop_type
+        datetime scheduled_time
+    }
+    bookings {
+        int booking_id PK
+        int passenger_id FK
+        int flight_id FK
+        datetime booking_date
+        decimal fare_paid
+        string seat_number
+        int rebooked_from FK "self"
+    }
+
+    passengers |o--o{ bookings : "makes"
+    flights ||--o{ bookings : "is booked as"
+    flights ||--|{ flight_routes : "has stop"
+    airports ||--o{ flight_routes : "is a stop in"
+    bookings |o--o| bookings : "rebooked from"
