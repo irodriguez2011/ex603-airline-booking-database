@@ -52,9 +52,23 @@ Design decisions worth noticing:
 - **All timestamps are UTC**, which keeps the `arrival_time > departure_time` check valid across time zones and lets `duration_min` be a stored generated column.
 - **Every constraint is named** (`pk_`, `fk_`, `uq_`, `chk_`), so errors point directly at the rule that was broken.
 
+## Data Used From Unit 3 Onward
+
+**Assignments from Unit 3 onward use the course-provided Unit 3 schema, not my Unit 1–2 schema.** Units 1–2 were practice in designing a database, and `schema/schema.sql` stays in this repo as that work. For query practice, everyone in the Airline Booking theme uses the same provided schema and dataset, **`ex603_data`**, and it will be used for the rest of the course. It follows the same roles — passengers make bookings on flights, and flights connect to airports through routes — but its columns differ from my schema:
+
+| | My schema (`schema/schema.sql`) | `ex603_data` |
+|---|---|---|
+| Airports | keyed by IATA `airport_code` | keyed by `airport_id` |
+| Routes | `stop_sequence` for multi-stop flights | `effective_from` date |
+| Bookings | `rebooked_from` change history | `booking_country`, `booking_status`, `cancellation_reason`, `bags_kg`, `fare_multiplier` |
+| Extra table | — | `flight_services` |
+| Deleting a passenger | `SET NULL` | `RESTRICT` |
+
+All queries and analysis from Unit 3 onward describe `ex603_data`. It contains 200 bookings, 30 passengers, 15 flights, and 5 airports.
+
 ## Project Status
 
-This project has completed **Unit 2: implementation**. Unit 1 produced the relation schemas, ERD, integrity constraints, and written analysis. Unit 2 translated them into a working PostgreSQL schema (`schema/schema.sql`), updated the ERD where implementation changed the design, and documented every foreign key and CHECK decision in `analysis/unit2.md`. Queries and further analysis will be added in later units.
+This project has completed **Unit 4: aggregation**. Unit 1 produced the relation schemas, ERD, integrity constraints, and written analysis. Unit 2 translated them into a working PostgreSQL schema (`schema/schema.sql`), updated the ERD where implementation changed the design, and documented every foreign key and CHECK decision in `analysis/unit2.md`. Unit 3 audited the booking data with filtering, NULL handling, and subqueries, and found that the dashboard's 50% failure rate was really 6% (`analysis/unit3-finding.md`). Unit 4 summarized the platform with aggregate functions, GROUP BY, HAVING, conditional aggregation, ROLLUP, and CTEs, and identified the flights to investigate (`analysis/unit4.md`, `analysis/unit4-finding.md`).
 
 ## Planned Repository Structure
 
@@ -68,14 +82,22 @@ This project has completed **Unit 2: implementation**. Unit 1 produced the relat
 │   ├── erd.png
 │   └── erd.mmd
 ├── queries/
-│   ├── unit3/
+│   ├── q3_1.sql, q3_2.sql, q3_3.sql   (Unit 3)
 │   ├── unit4/
+│   │   ├── q4_1.sql
+│   │   └── q4_2.sql
 │   ├── unit5/
 │   └── unit6/
 ├── analysis/
 │   ├── unit1.md
-│   └── unit2.md
+│   ├── unit2.md
+│   ├── unit3-finding.md
+│   ├── unit4.md
+│   └── unit4-finding.md
 └── screenshots/
+    ├── unit2/
+    ├── unit3/
+    └── unit4/
 ```
 
 ## Technology
@@ -102,8 +124,18 @@ Queries and the business questions they answer will be documented here as they a
 
 | Unit   | Query or topic | Business question | Status      |
 | ------ | --------------- | ------------------ | ------------ |
-| Unit 3 | To be added     | To be added         | Not started |
-| Unit 4 | To be added     | To be added         | Not started |
+| Unit 3 | [`q3_1.sql`](queries/q3_1.sql) 3.1a–g — what the data contains | Which active flights are largest, what booking statuses exist, which bookings fall in a fare range or status list, which flights start with VN, which bookings lack a cancellation reason, and how flights group by capacity? | Complete |
+| Unit 3 | [`q3_2.sql`](queries/q3_2.sql) 3.2A — the rows that vanished | Why does filtering on `cancellation_reason != 'Passenger no show'` miss 166 bookings, and how is it fixed? | Complete |
+| Unit 3 | [`q3_2.sql`](queries/q3_2.sql) 3.2B — the alias that did not exist yet | Why can't a SELECT alias be used in WHERE, and what are two ways around it? | Complete |
+| Unit 3 | [`q3_3.sql`](queries/q3_3.sql) 3.3 — corrected query, three ways | Which passengers have at least one disputed booking, and do IN, a CTE, and EXISTS give identical answers? | Complete |
+| Unit 4 | [`q4_1.sql`](queries/unit4/q4_1.sql) 4.1.1 — platform totals | How many bookings, how much fare, what average/lowest/highest fare, and how many distinct passengers does the platform have? | Complete |
+| Unit 4 | [`q4_1.sql`](queries/unit4/q4_1.sql) 4.1.1b — zero-fare check | Are the $0.00 fares spread across all bookings, or do they belong to one booking status? | Complete |
+| Unit 4 | [`q4_1.sql`](queries/unit4/q4_1.sql) 4.1.2 — bookings per flight | How many bookings and what average fare does each flight have, busiest first? | Complete |
+| Unit 4 | [`q4_1.sql`](queries/unit4/q4_1.sql) 4.1.3 — HAVING threshold | Which flights have at least 15 bookings, enough for their no-show rate to mean something? | Complete |
+| Unit 4 | [`q4_1.sql`](queries/unit4/q4_1.sql) 4.1.4 — region × status | How do bookings and fares break down by booking country and booking status? | Complete |
+| Unit 4 | [`q4_2.sql`](queries/unit4/q4_2.sql) Part A — conditional aggregation | For each flight, how many bookings and how many no-shows, side by side? | Complete |
+| Unit 4 | [`q4_2.sql`](queries/unit4/q4_2.sql) Part B — ROLLUP | What are each region's subtotals and the platform grand total? | Complete |
+| Unit 4 | [`q4_2.sql`](queries/unit4/q4_2.sql) Part C — CTE pipeline | What is the baseline no-show rate, cancellation rate, and fare for high-volume flights? | Complete |
 | Unit 5 | To be added     | To be added         | Not started |
 | Unit 6 | To be added     | To be added         | Not started |
 
