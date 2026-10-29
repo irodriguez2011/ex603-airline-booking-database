@@ -54,7 +54,7 @@ Design decisions worth noticing:
 
 ## Data Used From Unit 3 Onward
 
-Units 1–2 designed and implemented the schema above (`schema/schema.sql`), but that schema has no data loaded into it. From Unit 3 onward, the queries run against **`ex603_data`**, a populated dataset for the Airline Booking theme. It follows the same roles — passengers make bookings on flights, and flights connect to airports through routes — but its columns differ from my schema:
+**Assignments from Unit 3 onward use the course-provided Unit 3 schema, not my Unit 1–2 schema.** Units 1–2 were practice in designing a database, and `schema/schema.sql` stays in this repo as that work. For query practice, everyone in the Airline Booking theme uses the same provided schema and dataset, **`ex603_data`**, and it will be used for the rest of the course. It follows the same roles — passengers make bookings on flights, and flights connect to airports through routes — but its columns differ from my schema:
 
 | | My schema (`schema/schema.sql`) | `ex603_data` |
 |---|---|---|
@@ -64,7 +64,7 @@ Units 1–2 designed and implemented the schema above (`schema/schema.sql`), but
 | Extra table | — | `flight_services` |
 | Deleting a passenger | `SET NULL` | `RESTRICT` |
 
-The analysis in Units 3 and 4 describes `ex603_data`. It contains 200 bookings, 30 passengers, 15 flights, and 5 airports.
+All queries and analysis from Unit 3 onward describe `ex603_data`. It contains 200 bookings, 30 passengers, 15 flights, and 5 airports.
 
 ## Project Status
 
