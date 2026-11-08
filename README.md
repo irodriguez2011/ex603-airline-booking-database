@@ -68,7 +68,7 @@ All queries and analysis from Unit 3 onward describe `ex603_data`. It contains 2
 
 ## Project Status
 
-This project has completed **Unit 4: aggregation**. Unit 1 produced the relation schemas, ERD, integrity constraints, and written analysis. Unit 2 translated them into a working PostgreSQL schema (`schema/schema.sql`), updated the ERD where implementation changed the design, and documented every foreign key and CHECK decision in `analysis/unit2.md`. Unit 3 audited the booking data with filtering, NULL handling, and subqueries, and found that the dashboard's 50% failure rate was really 6% (`analysis/unit3-finding.md`). Unit 4 summarized the platform with aggregate functions, GROUP BY, HAVING, conditional aggregation, ROLLUP, and CTEs, and identified the flights to investigate (`analysis/unit4.md`, `analysis/unit4-finding.md`).
+This project has completed **Unit 5: joins**. Unit 1 produced the relation schemas, ERD, integrity constraints, and written analysis. Unit 2 translated them into a working PostgreSQL schema (`schema/schema.sql`), updated the ERD where implementation changed the design, and documented every foreign key and CHECK decision in `analysis/unit2.md`. Unit 3 audited the booking data with filtering, NULL handling, and subqueries, and found that the dashboard's 50% failure rate was really 6% (`analysis/unit3-finding.md`). Unit 4 summarized the platform with aggregate functions, GROUP BY, HAVING, conditional aggregation, ROLLUP, and CTEs, and identified the flights to investigate (`analysis/unit4.md`, `analysis/unit4-finding.md`). Unit 5 connected bookings to passengers, flights, and airports with joins, used outer joins to find two active flights that were never booked, read the query execution plan, and recommended separate actions for flights that fail often and flights that never started (`analysis/unit5.md`, `analysis/unit5-finding.md`).
 
 ## Planned Repository Structure
 
@@ -87,17 +87,23 @@ This project has completed **Unit 4: aggregation**. Unit 1 produced the relation
 │   │   ├── q4_1.sql
 │   │   └── q4_2.sql
 │   ├── unit5/
+│   │   ├── q5_1.sql
+│   │   ├── q5_2.sql
+│   │   └── q5_3.sql
 │   └── unit6/
 ├── analysis/
 │   ├── unit1.md
 │   ├── unit2.md
 │   ├── unit3-finding.md
 │   ├── unit4.md
-│   └── unit4-finding.md
+│   ├── unit4-finding.md
+│   ├── unit5.md
+│   └── unit5-finding.md
 └── screenshots/
     ├── unit2/
     ├── unit3/
-    └── unit4/
+    ├── unit4/
+    └── unit5/
 ```
 
 ## Technology
@@ -136,7 +142,14 @@ Queries and the business questions they answer will be documented here as they a
 | Unit 4 | [`q4_2.sql`](queries/unit4/q4_2.sql) Part A — conditional aggregation | For each flight, how many bookings and how many no-shows, side by side? | Complete |
 | Unit 4 | [`q4_2.sql`](queries/unit4/q4_2.sql) Part B — ROLLUP | What are each region's subtotals and the platform grand total? | Complete |
 | Unit 4 | [`q4_2.sql`](queries/unit4/q4_2.sql) Part C — CTE pipeline | What is the baseline no-show rate, cancellation rate, and fare for high-volume flights? | Complete |
-| Unit 5 | To be added     | To be added         | Not started |
+| Unit 5 | [`q5_1.sql`](queries/unit5/q5_1.sql) 5.1.1: three-table join | Who booked each seat on the flights flagged in Unit 4, when, and how did each booking end? | Complete |
+| Unit 5 | [`q5_1.sql`](queries/unit5/q5_1.sql) 5.1.2: junction table | Which flights route through Changi Airport (SIN), the airport all three flagged flights share? | Complete |
+| Unit 5 | [`q5_1.sql`](queries/unit5/q5_1.sql) 5.1.3: self join | How do the flagged flights compare with flights of the same seat capacity? | Complete |
+| Unit 5 | [`q5_2.sql`](queries/unit5/q5_2.sql) Part A: INNER vs. LEFT JOIN | Which flights does an inner join leave out, and how many? | Complete |
+| Unit 5 | [`q5_2.sql`](queries/unit5/q5_2.sql) Part B: RIGHT and FULL OUTER JOIN | Does the RIGHT JOIN match the LEFT JOIN, and are there unmatched rows on either side? | Complete |
+| Unit 5 | [`q5_2.sql`](queries/unit5/q5_2.sql) Part C: NOT EXISTS and EXCEPT | Which flights have never been booked, and do both methods agree? | Complete |
+| Unit 5 | [`q5_3.sql`](queries/unit5/q5_3.sql) Part A: CROSS JOIN | Does a CROSS JOIN return the product of its table sizes, and when is that useful or a mistake? | Complete |
+| Unit 5 | [`q5_3.sql`](queries/unit5/q5_3.sql) Part B: EXPLAIN | Which join algorithms does PostgreSQL choose for the three-table join, and why? | Complete |
 | Unit 6 | To be added     | To be added         | Not started |
 
 ## Technical Highlights
