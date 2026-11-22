@@ -1,6 +1,6 @@
-# Airline Booking Analytics in PostgreSQL
+# Airline Booking Database: Design and SQL Analysis
 
-A SQL analysis of an airline booking platform: it found that a dashboard's 50% failure rate was really 6%, traced the failures to specific flights, and measured whether the platform improved over 2023.
+A PostgreSQL project in two parts: I designed a relational database for an airline booking platform, then used SQL on the course dataset to find that a dashboard's 50% failure rate was really 6%, trace the failures to specific flights, and measure whether the platform improved over 2023.
 
 ## The Domain
 
