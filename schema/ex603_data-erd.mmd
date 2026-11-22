@@ -1,0 +1,53 @@
+erDiagram
+    passengers ||--o{ bookings : "makes"
+    passengers |o--o{ passengers : "referred_by"
+    flights ||--o{ bookings : "is booked on"
+    flights ||--o{ flight_routes : "routes through"
+    airports ||--o{ flight_routes : "serves"
+    flights ||--o{ flight_services : "offers"
+
+    passengers {
+        int passenger_id PK
+        varchar passenger_name
+        date signup_date
+        varchar home_country
+        varchar email UK
+        int referred_by FK
+        boolean is_active
+    }
+    flights {
+        int flight_id PK
+        varchar flight_number
+        date first_scheduled_on
+        varchar origin_country
+        varchar tail_number UK
+        smallint seat_capacity
+        boolean is_active
+    }
+    bookings {
+        bigint booking_id PK
+        int passenger_id FK
+        int flight_id FK
+        timestamp booked_at
+        timestamp checked_in_at
+        varchar booking_country
+        decimal fare_paid
+        decimal bags_kg
+        decimal fare_multiplier
+        varchar booking_status
+        varchar cancellation_reason
+    }
+    airports {
+        int airport_id PK
+        varchar iata_code UK
+        varchar airport_name
+    }
+    flight_routes {
+        int flight_id PK, FK
+        int airport_id PK, FK
+        date effective_from
+    }
+    flight_services {
+        int flight_id PK, FK
+        char service_code PK
+    }
