@@ -157,6 +157,15 @@ The full argument, with the query behind every number, is in the [closing memo](
 **What would help:**
 - **More data:** at least two years of bookings, to compare each quarter with the same quarter a year earlier and to test whether the no-show drop is statistically significant (for example, a two-proportion test).
 - **A schedule and availability table:** when each flight was on sale and when it departed, to tell a real stop from a flight nobody could book.
+- **A rule that a cancelled booking must have a reason.** In this data, an empty `cancellation_reason` always means "not cancelled": all 34 cancelled bookings have a reason. The provided schema doesn't enforce that, though, so in a live system a cancellation saved without a reason would look exactly like a confirmed booking. A constraint closes that gap:
+
+  ```sql
+  ALTER TABLE bookings
+    ADD CONSTRAINT ck_bookings_cancel_reason
+    CHECK ((booking_status = 'cancelled') = (cancellation_reason IS NOT NULL));
+  ```
+
+  It requires a reason on every cancelled booking and forbids one on any other booking. It passes on all 200 current bookings.
 - **Check-in reminder logs:** if the team runs the recommended reminders, a record of who received one would allow a before-and-after comparison instead of an inference.
 
 ## Video Presentation
