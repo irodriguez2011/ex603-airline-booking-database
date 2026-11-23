@@ -170,7 +170,9 @@ The full argument, with the query behind every number, is in the [closing memo](
 
 ## Video Presentation
 
-**[Watch the 5-minute presentation](VIDEO_LINK_HERE)**: the business question, three representative queries (including the Unit 6 window functions), the findings, and the main limitation.
+**[▶ Watch the presentation on Loom (4:20)](https://www.loom.com/share/d87175352e33469199ecd28c610b7622)**
+
+The video covers the business question, three representative queries (the NULL filter from Unit 3 and two Unit 6 window-function queries), the findings and recommendations, and the main challenge and limitation.
 
 ## How to Run It
 
